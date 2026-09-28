@@ -17,7 +17,7 @@ def send_verification_email(
     )
 
     params = {
-        "from": "FINANZAS <onboarding@resend.dev>",
+        "from": "FINANZAS <no-reply@finaapp.trade>",
 
         "to": [email],
 
