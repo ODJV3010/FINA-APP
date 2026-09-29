@@ -470,11 +470,10 @@ function Transactions() {
 
                 <input
                   type="text"
-                  inputMode="numeric"
-                  name="amount"
+                  name="description"
                   className="input input-bordered w-full"
-                  placeholder="Ej: 50.000"
-                  value={form.amount}
+                  placeholder="Ej: Compra de mercado"
+                  value={form.description}
                   onChange={handleChange}
                   required
                 />
@@ -488,12 +487,11 @@ function Transactions() {
                 </label>
 
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   name="amount"
                   className="input input-bordered w-full"
-                  placeholder="Ej: 50000"
-                  min="0"
-                  step="0.01"
+                  placeholder="Ej: 50.000"
                   value={form.amount}
                   onChange={handleChange}
                   required
