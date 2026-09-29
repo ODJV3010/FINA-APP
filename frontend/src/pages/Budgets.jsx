@@ -3,6 +3,8 @@ import { FaPlus, FaEdit, FaTrash, FaWallet } from "react-icons/fa";
 
 import api from "../services/api";
 
+import { formatNumberWithThousands, cleanNumber } from "../utils/formatMoney";
+
 function Budgets() {
   const [budgets, setBudgets] = useState([]);
   const [budgetAnalysis, setBudgetAnalysis] = useState([]);
@@ -69,9 +71,20 @@ function Budgets() {
   // ==========================================
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "amount") {
+      setForm({
+        ...form,
+        amount: formatNumberWithThousands(value),
+      });
+
+      return;
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -104,7 +117,7 @@ function Budgets() {
 
     setForm({
       category: budget.category,
-      amount: budget.amount,
+      amount: formatNumberWithThousands(Number(budget.amount)),
       month: budget.month,
       year: budget.year,
     });
@@ -135,7 +148,7 @@ function Budgets() {
     setError("");
     setSuccess("");
 
-    const amount = Number(form.amount);
+    const amount = Number(cleanNumber(form.amount));
     const month = Number(form.month);
     const year = Number(form.year);
 
@@ -486,12 +499,12 @@ function Budgets() {
                 </label>
 
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   name="amount"
                   value={form.amount}
                   onChange={handleChange}
-                  placeholder="Ej: 500000"
-                  min="1"
+                  placeholder="Ej: 500.000"
                   className="input input-bordered w-full"
                 />
               </div>

@@ -9,6 +9,8 @@ import {
 
 import api from "../services/api";
 
+import { formatNumberWithThousands, cleanNumber } from "../utils/formatMoney";
+
 function Goals() {
   const [goals, setGoals] = useState([]);
 
@@ -59,9 +61,20 @@ function Goals() {
   // ==========================================
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "target_amount" || name === "current_amount") {
+      setForm({
+        ...form,
+        [name]: formatNumberWithThousands(value),
+      });
+
+      return;
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -94,8 +107,8 @@ function Goals() {
 
     setForm({
       name: goal.name,
-      target_amount: goal.target_amount,
-      current_amount: goal.current_amount,
+      target_amount: formatNumberWithThousands(Number(goal.target_amount)),
+      current_amount: formatNumberWithThousands(Number(goal.current_amount)),
       deadline: goal.deadline,
     });
 
@@ -125,9 +138,9 @@ function Goals() {
     setError("");
     setSuccess("");
 
-    const target = Number(form.target_amount);
+    const target = Number(cleanNumber(form.target_amount));
 
-    const current = Number(form.current_amount);
+    const current = Number(cleanNumber(form.current_amount));
 
     // Validaciones
 
@@ -466,12 +479,12 @@ function Goals() {
                 </label>
 
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   name="target_amount"
                   value={form.target_amount}
                   onChange={handleChange}
-                  placeholder="Ej: 5000000"
-                  min="1"
+                  placeholder="Ej: 5.000.000"
                   className="input input-bordered w-full"
                 />
               </div>
@@ -484,12 +497,12 @@ function Goals() {
                 </label>
 
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   name="current_amount"
                   value={form.current_amount}
                   onChange={handleChange}
-                  placeholder="Ej: 1000000"
-                  min="0"
+                  placeholder="Ej: 1.000.000"
                   className="input input-bordered w-full"
                 />
               </div>

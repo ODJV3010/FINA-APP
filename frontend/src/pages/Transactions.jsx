@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
+import { formatNumberWithThousands, cleanNumber } from "../utils/formatMoney";
+
 import {
   FaPlus,
   FaEdit,
@@ -72,6 +74,15 @@ function Transactions() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "amount") {
+      setForm((prev) => ({
+        ...prev,
+        amount: formatNumberWithThousands(value),
+      }));
+
+      return;
+    }
+
     setForm((prev) => ({
       ...prev,
       [name]: value,
@@ -108,7 +119,7 @@ function Transactions() {
 
     setForm({
       description: transaction.description,
-      amount: transaction.amount,
+      amount: formatNumberWithThousands(Number(transaction.amount)),
       date: transaction.date,
       type: transaction.type,
       category: transaction.category || "",
@@ -134,7 +145,7 @@ function Transactions() {
     try {
       const data = {
         description: form.description,
-        amount: form.amount,
+        amount: cleanNumber(form.amount),
         date: form.date,
         type: form.type,
         category: form.category || null,
@@ -459,10 +470,11 @@ function Transactions() {
 
                 <input
                   type="text"
-                  name="description"
+                  inputMode="numeric"
+                  name="amount"
                   className="input input-bordered w-full"
-                  placeholder="Ej: Compra de mercado"
-                  value={form.description}
+                  placeholder="Ej: 50.000"
+                  value={form.amount}
                   onChange={handleChange}
                   required
                 />
