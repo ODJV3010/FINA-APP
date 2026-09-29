@@ -33,7 +33,7 @@ class BudgetSerializer(serializers.ModelSerializer):
 
         if category:
 
-            if request and category.user != request.user:
+            if request and category.user is not None and category.user != request.user:
 
                 raise serializers.ValidationError({
                     'category':
